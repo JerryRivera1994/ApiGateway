@@ -1,0 +1,59 @@
+{
+  "Aggregates": [
+    {
+      "UpstreamPathTemplate": "/api/laboratorybrand/",
+      "Routekeys": [ "laboratory", "brand" ]
+      //"Aggregator": "UsersPostsAggregator" Esto sirve para devolver solo lo que deseo que retorne
+    }
+  ],
+  
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/laboratory/",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "apimedicam.herokuapp.com",
+          "Port": 443
+        }
+      ], //balanceador
+      "DownstreamPathTemplate": "/medicines/laboratory/",
+      "key": "laboratory",
+      "RateLimitOptions": {
+        //para ataque DOS
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "3s",
+        "PeriodTimespan": 8,
+        "Limit": 3
+
+      },
+      "DelegatingHandlers": [
+        "BlackListHandler"
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/brand/",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "jsonplaceholder.typicode.com",
+          "Port": 443
+        }
+      ], //balanceador
+      "DownstreamPathTemplate": "/posts",
+      "key": "brand",
+      //"AuthenticationOptions": {
+      //  "AuthenticationProviderKey": "Bearer"
+      //},
+      //"RouteClaimsRequirement": {
+      //  "userType": "cualquiercosa"
+      //}
+
+
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:44302"
+  }
+}
