@@ -6,7 +6,7 @@
       //"Aggregator": "UsersPostsAggregator" Esto sirve para devolver solo lo que deseo que retorne
     }
   ],
-  
+
   "Routes": [
     {
       "UpstreamPathTemplate": "/api/laboratory/",
@@ -26,7 +26,6 @@
         "Period": "3s",
         "PeriodTimespan": 8,
         "Limit": 3
-
       },
       "DelegatingHandlers": [
         "BlackListHandler"
@@ -43,14 +42,63 @@
       ], //balanceador
       "DownstreamPathTemplate": "/posts",
       "key": "brand",
-      //"AuthenticationOptions": {
-      //  "AuthenticationProviderKey": "Bearer"
-      //},
-      //"RouteClaimsRequirement": {
-      //  "userType": "cualquiercosa"
-      //}
-
-
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "rol": "administrador"
+      }
+    },
+    {
+      // AUTH 
+      "UpstreamPathTemplate": "/api/auth/{path}",
+      "UpstreamHttpMethod": [],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 3000
+        }
+      ],
+      "DownstreamPathTemplate": "/api/{path}",
+      "key": "auth"
+    },
+    {
+      // CLIENT
+      "UpstreamPathTemplate": "/api/client",
+      "UpstreamHttpMethod": [ "POST", "PUT" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9000
+        }
+      ],
+      "DownstreamPathTemplate": "/api/cliente",
+      "key": "clientPost",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "rol": "cliente"
+      }
+    },
+    {
+      // CLIENT
+      "UpstreamPathTemplate": "/api/client",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9000
+        }
+      ],
+      "DownstreamPathTemplate": "/api/cliente",
+      "key": "client",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ],
   "GlobalConfiguration": {

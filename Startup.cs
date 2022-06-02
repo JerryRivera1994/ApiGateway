@@ -41,7 +41,7 @@ namespace ApiGateway
                         ValidateIssuerSigningKey = true,
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("MyAnonymousAndSecuredSecretKey")),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("authmicroservicio-api")),
                         ClockSkew = new System.TimeSpan(0)
                     };
                 });
